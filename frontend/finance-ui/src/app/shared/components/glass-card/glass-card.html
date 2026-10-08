@@ -1,0 +1,7 @@
+<div class="glass-card" 
+     [class.interactive]="interactive()" 
+     [class.glow]="glow()"
+     [class.hero]="variant() === 'hero'"
+     [class.secondary]="variant() === 'secondary'">
+  <ng-content></ng-content>
+</div>

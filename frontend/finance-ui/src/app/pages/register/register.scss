@@ -1,0 +1,243 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.auth-split-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Left Marketing Panel */
+.auth-marketing-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .brand-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.775rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary);
+
+    .brand-mark-mini {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-xs);
+      background: var(--primary);
+      color: #ffffff;
+    }
+  }
+
+  .marketing-headline {
+    font-size: clamp(2rem, 3.2vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+    color: var(--text-primary);
+  }
+
+  .marketing-subhead {
+    font-size: 0.975rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 480px;
+  }
+
+  .feature-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      font-weight: 500;
+
+      .check-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--success-soft);
+        color: var(--success);
+        border: 1px solid var(--success-border);
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .sentinel-wrapper {
+    margin-top: 0.5rem;
+    max-width: 320px;
+  }
+
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.775rem;
+    color: var(--text-muted);
+  }
+}
+
+/* Right Card Panel */
+.auth-card-panel {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 2.25rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-header {
+  margin-bottom: 1.5rem;
+
+  .auth-logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: var(--shadow-xs);
+    margin-bottom: 1rem;
+  }
+
+  .auth-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    margin-bottom: 0.35rem;
+  }
+
+  .auth-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  .form-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+}
+
+.form-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--danger-soft);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.auth-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+
+  .switch-auth-text {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+
+    .auth-link {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 0.25rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .auth-split-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .auth-marketing-panel {
+    text-align: center;
+    align-items: center;
+
+    .marketing-subhead {
+      margin: 0 auto;
+    }
+
+    .feature-checklist {
+      align-items: flex-start;
+      margin: 0 auto;
+    }
+  }
+
+  .auth-card {
+    max-width: 100%;
+  }
+}

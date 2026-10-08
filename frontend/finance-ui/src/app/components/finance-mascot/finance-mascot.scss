@@ -1,0 +1,118 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.security-sentinel-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sentinel-canvas {
+  display: block;
+  width: 100%;
+  height: 220px;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.sentinel-badge-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.shield-halo {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary-soft) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.shield-emblem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+
+  .spin-icon {
+    animation: emblemSpin 1s linear infinite;
+  }
+}
+
+[data-mood='success'] .shield-emblem {
+  color: var(--success);
+  border-color: var(--success-border);
+  background: var(--success-soft);
+}
+
+[data-mood='failure'] .shield-emblem {
+  color: var(--danger);
+  border-color: var(--danger-border);
+  background: var(--danger-soft);
+}
+
+.sentinel-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 0.775rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 2;
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+}
+
+[data-mood='success'] .sentinel-status-pill .pulse-dot {
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+}
+
+[data-mood='failure'] .sentinel-status-pill .pulse-dot {
+  background: var(--danger);
+}
+
+@keyframes emblemSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

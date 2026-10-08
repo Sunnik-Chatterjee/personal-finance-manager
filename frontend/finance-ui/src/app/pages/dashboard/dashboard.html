@@ -1,0 +1,399 @@
+<div class="dashboard-page">
+  <div class="aurora-ambient-bg" aria-hidden="true"></div>
+  
+  <app-navbar />
+
+  <main class="app-container">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <div class="welcome-meta">
+          <span class="status-indicator"></span>
+          <span class="status-text">Live Ledger</span>
+          <span class="meta-dot">·</span>
+          <span class="meta-date">Real-time Overview</span>
+        </div>
+        <h1 class="header-title">{{ greeting() }}, {{ userFirstName() }}</h1>
+        
+        <!-- Financial Insight Strip -->
+        <div class="insight-strip" [attr.data-type]="insight().type">
+          <div class="insight-badge">
+            @switch (insight().type) {
+              @case ('positive') {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                  <polyline points="16 7 22 7 22 13"/>
+                </svg>
+              }
+              @case ('warning') {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              }
+              @default {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+              }
+            }
+            <span>Insight</span>
+          </div>
+          <div class="insight-content">
+            <span class="insight-text">{{ insight().text }}</span>
+            <span class="insight-subtext">{{ insight().subtext }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button type="button" class="btn-primary" (click)="openAddModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" x2="12" y1="5" y2="19"/>
+            <line x1="5" x2="19" y1="12" y2="12"/>
+          </svg>
+          <span>Add Transaction</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Section: 4 KPI Cards (Total Balance Hero first, then Income, Expense, Savings) -->
+    <section class="kpi-grid">
+      <!-- 1. Total Balance (Hero Card) -->
+      <app-glass-card [interactive]="true" [variant]="'hero'" class="kpi-card hero-balance-card">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Balance</span>
+            <div class="stat-icon balance">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="stat-body">
+            <h2 class="stat-value balance-value tabular-nums">
+              <app-rolling-number [value]="summary().balance" prefix="₹" />
+            </h2>
+            <div class="stat-trend neutral">
+              <span class="trend-badge">Net Available</span>
+            </div>
+          </div>
+        </div>
+      </app-glass-card>
+
+      <!-- 2. Income Card -->
+      <app-glass-card [interactive]="true" class="kpi-card">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Income</span>
+            <div class="stat-icon income">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" x2="12" y1="19" y2="5"/>
+                <polyline points="5 12 12 5 19 12"/>
+              </svg>
+            </div>
+          </div>
+          <div class="stat-body">
+            <h2 class="stat-value income-value tabular-nums">
+              <app-rolling-number [value]="summary().totalIncome" prefix="₹" />
+            </h2>
+            <div class="stat-trend positive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+              <span>Total Inflow</span>
+            </div>
+          </div>
+        </div>
+      </app-glass-card>
+
+      <!-- 3. Expense Card -->
+      <app-glass-card [interactive]="true" class="kpi-card">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Expense</span>
+            <div class="stat-icon expense">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" x2="12" y1="5" y2="19"/>
+                <polyline points="19 12 12 19 5 12"/>
+              </svg>
+            </div>
+          </div>
+          <div class="stat-body">
+            <h2 class="stat-value expense-value tabular-nums">
+              <app-rolling-number [value]="summary().totalExpense" prefix="₹" />
+            </h2>
+            <div class="stat-trend negative">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
+                <polyline points="16 17 22 17 22 11"/>
+              </svg>
+              <span>Total Outflow</span>
+            </div>
+          </div>
+        </div>
+      </app-glass-card>
+
+      <!-- 4. Savings Rate Card -->
+      <app-glass-card [interactive]="true" class="kpi-card">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Savings Rate</span>
+            <div class="stat-icon savings">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="stat-body">
+            <h2 class="stat-value savings-value tabular-nums">
+              <app-rolling-number [value]="savingsRate()" suffix="%" />
+            </h2>
+            <div class="stat-trend positive">
+              <span class="target-tag">Target: 20%+</span>
+            </div>
+          </div>
+        </div>
+      </app-glass-card>
+    </section>
+
+    <!-- Middle Section: Analytics & Charts Grid -->
+    <section class="analytics-grid">
+      <!-- Row 1: Cash Flow (65%) + Expense Distribution Donut (35%) -->
+      <div class="charts-primary-row">
+        <!-- Chart 1: Cash Flow Trend -->
+        <app-glass-card class="chart-card cash-flow-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Cash Flow Dynamics</h3>
+              <p class="chart-subtitle">Monthly Income vs. Expense trajectory</p>
+            </div>
+            <div class="chart-legend-custom">
+              <span class="legend-item"><span class="legend-dot income"></span> Income</span>
+              <span class="legend-item"><span class="legend-dot expense"></span> Expense</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            @if (hasMonthlyData() && cashFlowChartOptions.series) {
+              <apx-chart
+                [series]="cashFlowChartOptions.series!"
+                [chart]="cashFlowChartOptions.chart!"
+                [xaxis]="cashFlowChartOptions.xaxis!"
+                [yaxis]="cashFlowChartOptions.yaxis!"
+                [stroke]="cashFlowChartOptions.stroke!"
+                [fill]="cashFlowChartOptions.fill!"
+                [colors]="cashFlowChartOptions.colors!"
+                [dataLabels]="cashFlowChartOptions.dataLabels!"
+                [grid]="cashFlowChartOptions.grid!"
+                [tooltip]="cashFlowChartOptions.tooltip!"
+                [legend]="cashFlowChartOptions.legend!"
+              ></apx-chart>
+            } @else {
+              <div class="chart-empty-state">
+                <div class="empty-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                  </svg>
+                </div>
+                <h4 class="empty-title">No cash flow recorded yet</h4>
+                <p class="empty-sub">Monthly income and expense telemetry will generate automatically as transactions are recorded.</p>
+                <button (click)="openAddModal()" class="btn-primary btn-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>Add Transaction</span>
+                </button>
+              </div>
+            }
+          </div>
+        </app-glass-card>
+
+        <!-- Chart 2: Expense Distribution Donut -->
+        <app-glass-card class="chart-card donut-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Expense Allocation</h3>
+              <p class="chart-subtitle">Category distribution breakdown</p>
+            </div>
+          </div>
+          <div class="chart-container donut-container">
+            @if (hasExpenseData() && expenseChartOptions.series && expenseChartOptions.series.length > 0) {
+              <apx-chart
+                [series]="expenseChartOptions.series!"
+                [chart]="expenseChartOptions.chart!"
+                [labels]="expenseChartOptions.labels!"
+                [colors]="expenseChartOptions.colors!"
+                [legend]="expenseChartOptions.legend!"
+                [dataLabels]="expenseChartOptions.dataLabels!"
+                [tooltip]="expenseChartOptions.tooltip!"
+                [plotOptions]="expenseChartOptions.plotOptions!"
+                [stroke]="expenseChartOptions.stroke!"
+              ></apx-chart>
+            } @else {
+              <div class="chart-empty-state">
+                <div class="empty-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 2a10 10 0 0 1 10 10"/>
+                  </svg>
+                </div>
+                <h4 class="empty-title">No expense allocation yet</h4>
+                <p class="empty-sub">Categorized expenses will appear in this breakdown once expense transactions exist.</p>
+                <button (click)="openAddModal()" class="btn-primary btn-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>Add Expense</span>
+                </button>
+              </div>
+            }
+          </div>
+        </app-glass-card>
+      </div>
+
+      <!-- Row 2: Income vs Expense Volume + Savings Trend -->
+      <div class="charts-secondary-row">
+        <!-- Chart 3: Income vs Expense Ratio -->
+        <app-glass-card class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Volumetric Comparison</h3>
+              <p class="chart-subtitle">Total Inflow vs. Outflow ratio</p>
+            </div>
+          </div>
+          <div class="chart-container">
+            @if (hasComparisonData() && barChartOptions.series) {
+              <apx-chart
+                [series]="barChartOptions.series!"
+                [chart]="barChartOptions.chart!"
+                [plotOptions]="barChartOptions.plotOptions!"
+                [xaxis]="barChartOptions.xaxis!"
+                [yaxis]="barChartOptions.yaxis!"
+                [colors]="barChartOptions.colors!"
+                [dataLabels]="barChartOptions.dataLabels!"
+                [grid]="barChartOptions.grid!"
+                [tooltip]="barChartOptions.tooltip!"
+              ></apx-chart>
+            } @else {
+              <div class="chart-empty-state">
+                <div class="empty-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                    <path d="M7 17v-4"/>
+                    <path d="M12 17V7"/>
+                    <path d="M17 17v-8"/>
+                  </svg>
+                </div>
+                <h4 class="empty-title">No inflow or outflow data</h4>
+                <p class="empty-sub">Compare your total income against expenses once your ledger contains transactions.</p>
+                <button (click)="openAddModal()" class="btn-primary btn-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>Record Entry</span>
+                </button>
+              </div>
+            }
+          </div>
+        </app-glass-card>
+
+        <!-- Chart 4: Monthly Savings Trend -->
+        <app-glass-card class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Net Savings Trajectory</h3>
+              <p class="chart-subtitle">Cumulative capital retained</p>
+            </div>
+          </div>
+          <div class="chart-container">
+            @if (hasMonthlyData() && savingsChartOptions.series) {
+              <apx-chart
+                [series]="savingsChartOptions.series!"
+                [chart]="savingsChartOptions.chart!"
+                [xaxis]="savingsChartOptions.xaxis!"
+                [yaxis]="savingsChartOptions.yaxis!"
+                [stroke]="savingsChartOptions.stroke!"
+                [fill]="savingsChartOptions.fill!"
+                [colors]="savingsChartOptions.colors!"
+                [dataLabels]="savingsChartOptions.dataLabels!"
+                [grid]="savingsChartOptions.grid!"
+                [tooltip]="savingsChartOptions.tooltip!"
+              ></apx-chart>
+            } @else {
+              <div class="chart-empty-state">
+                <div class="empty-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                  </svg>
+                </div>
+                <h4 class="empty-title">No savings trajectory yet</h4>
+                <p class="empty-sub">Monitor your net savings rate across monthly periods as transaction history builds.</p>
+                <button (click)="openAddModal()" class="btn-primary btn-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>Add Transaction</span>
+                </button>
+              </div>
+            }
+          </div>
+        </app-glass-card>
+      </div>
+    </section>
+
+    <!-- Bottom Section: Recent Transactions Ledger -->
+    <section class="recent-activity-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Recent Transactions</h2>
+          <p class="section-subtitle">Latest chronological ledger activity</p>
+        </div>
+        <a routerLink="/transactions" class="btn-secondary view-all-link">
+          <span>View All Transactions</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="recent-feed">
+        @if (summary().recentTransactions.length > 0) {
+          @for (tx of summary().recentTransactions; track tx._id) {
+            <app-transaction-item
+              [transaction]="tx"
+              [allowActions]="false"
+            />
+          }
+        } @else {
+          <app-glass-card>
+            <app-empty-state
+              title="No recent transactions"
+              description="Your latest income and expense entries will appear here chronologically."
+              actionLabel="Add Transaction"
+              (actionClicked)="openAddModal()"
+            />
+          </app-glass-card>
+        }
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for creating new transaction -->
+  <app-transaction-modal
+    [isOpen]="isAddModalOpen()"
+    (closed)="closeAddModal()"
+    (saved)="onTransactionSaved()"
+  />
+</div>

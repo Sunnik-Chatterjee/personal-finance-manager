@@ -1,0 +1,96 @@
+<header class="navbar-wrapper">
+  <div class="navbar-inner">
+    <div class="navbar-left">
+      <a routerLink="/dashboard" class="brand-logo" title="BroFin">
+        <div class="logo-mark" aria-hidden="true">
+          <img src="assets/logo/logo.svg" alt="BroFin" width="22" height="22" class="brand-logo-img" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">BroFin</span>
+        </div>
+      </a>
+
+      <div class="nav-divider" aria-hidden="true"></div>
+
+      <nav class="nav-links">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/transactions" routerLinkActive="active" class="nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" x2="12" y1="2" y2="22"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <span>Transactions</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="navbar-right">
+      <!-- Theme Switcher -->
+      <div class="theme-picker" role="radiogroup" aria-label="Theme selector">
+        <button 
+          type="button" 
+          class="theme-btn" 
+          [class.active]="themeService.themeMode() === 'light'"
+          (click)="themeService.setTheme('light')"
+          title="Light Theme"
+          aria-label="Light Theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+        </button>
+        <button 
+          type="button" 
+          class="theme-btn" 
+          [class.active]="themeService.themeMode() === 'auto'"
+          (click)="themeService.setTheme('auto')"
+          title="System Theme"
+          aria-label="System Theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="3" rx="2"/>
+            <line x1="8" x2="16" y1="21" y2="21"/>
+            <line x1="12" x2="12" y1="17" y2="21"/>
+          </svg>
+        </button>
+        <button 
+          type="button" 
+          class="theme-btn" 
+          [class.active]="themeService.themeMode() === 'dark'"
+          (click)="themeService.setTheme('dark')"
+          title="Dark Theme"
+          aria-label="Dark Theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- User Menu -->
+      @if (authService.currentUser(); as user) {
+        <div class="user-profile">
+          <div class="avatar" [title]="user.email">
+            {{ userInitials() }}
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ user.name }}</span>
+          </div>
+          <button type="button" class="logout-btn" (click)="authService.logout()" title="Sign out" aria-label="Sign out">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" x2="9" y1="12" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

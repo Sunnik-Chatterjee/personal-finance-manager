@@ -1,0 +1,25 @@
+.rolling-number {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+
+  .prefix {
+    margin-right: 0.15em;
+    opacity: 0.85;
+    font-weight: 500;
+  }
+
+  .suffix {
+    margin-left: 0.15em;
+    opacity: 0.85;
+    font-size: 0.8em;
+  }
+
+  .value-display {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+}

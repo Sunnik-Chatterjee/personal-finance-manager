@@ -1,0 +1,231 @@
+.transaction-item-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--card-radius);
+  margin-bottom: 0.375rem;
+}
+
+.transaction-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 0.875rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  transition: background 0.15s ease,
+              border-color 0.15s ease,
+              box-shadow 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: var(--shadow-xs);
+
+    .card-actions {
+      opacity: 1;
+    }
+  }
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  &[data-type='INCOME'] {
+    background: var(--success-soft);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+  }
+
+  &[data-type='EXPENSE'] {
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+  }
+}
+
+.transaction-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.1rem;
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .category-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .mobile-date {
+    display: none;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .description-text {
+    font-size: 0.775rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 340px;
+  }
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+
+  .date-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    min-width: 82px;
+    text-align: right;
+  }
+
+  .amount-badge {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: -0.02em;
+    min-width: 85px;
+    text-align: right;
+
+    &.income {
+      color: var(--success);
+      background: var(--success-soft);
+      border: 1px solid var(--success-border);
+    }
+
+    &.expense {
+      color: var(--danger);
+      background: var(--danger-soft);
+      border: 1px solid var(--danger-border);
+    }
+  }
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+
+  .inline-confirm-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    background: var(--bg-subtle);
+    border-radius: var(--radius-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    &.delete-trigger-btn:hover {
+      color: var(--danger);
+      background: var(--danger-soft);
+      border-color: var(--danger-border);
+    }
+
+    &.confirm-icon-btn {
+      color: #ffffff;
+      background: var(--danger);
+      border-color: var(--danger);
+
+      &:hover {
+        background: var(--danger-hover);
+      }
+    }
+
+    &.cancel-icon-btn {
+      color: var(--text-muted);
+      &:hover {
+        color: var(--text-primary);
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .transaction-card {
+    padding: 0.55rem 0.75rem;
+  }
+
+  .transaction-details {
+    .mobile-date {
+      display: inline-block;
+    }
+
+    .description-text {
+      max-width: 150px;
+    }
+  }
+
+  .card-right {
+    gap: 0.5rem;
+
+    .date-text {
+      display: none;
+    }
+
+    .amount-badge {
+      min-width: auto;
+      font-size: 0.825rem;
+      padding: 0.15rem 0.45rem;
+    }
+  }
+
+  .card-actions {
+    opacity: 1;
+  }
+}

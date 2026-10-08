@@ -1,0 +1,174 @@
+<div class="transactions-page">
+  <div class="aurora-ambient-bg" aria-hidden="true"></div>
+
+  <app-navbar />
+
+  <main class="app-container">
+    <!-- Header -->
+    <section class="page-header">
+      <div class="header-left">
+        <div class="header-eyebrow">Financial Ledger</div>
+        <h1 class="header-title">Transactions</h1>
+        <p class="header-description">
+          Review, filter, and reconcile all historical cash flow entries.
+        </p>
+      </div>
+
+      <div class="header-right">
+        <button type="button" class="btn-primary add-header-btn" (click)="openAddModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" x2="12" y1="5" y2="19"/>
+            <line x1="5" x2="19" y1="12" y2="12"/>
+          </svg>
+          <span>Add Transaction</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Filters Toolbar -->
+    <section class="filters-panel glass-panel">
+      <div class="filters-toolbar">
+        <!-- Search Input -->
+        <div class="filter-item search-item">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" x2="16.65" y1="21" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              class="glass-input search-input"
+              placeholder="Search description or note..."
+              [value]="searchQuery()"
+              (input)="onSearchChange($event)"
+            />
+          </div>
+        </div>
+
+        <!-- Type Filter -->
+        <div class="filter-item select-item">
+          <select class="glass-input glass-select" [value]="selectedType()" (change)="onTypeChange($event)" aria-label="Filter by type">
+            <option value="">All Types</option>
+            <option value="INCOME">Income Only</option>
+            <option value="EXPENSE">Expense Only</option>
+          </select>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-item select-item">
+          <select class="glass-input glass-select" [value]="selectedCategory()" (change)="onCategoryChange($event)" aria-label="Filter by category">
+            <option value="">All Categories</option>
+            @for (cat of categoryOptions(); track cat) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Date Range -->
+        <div class="filter-item date-item">
+          <input
+            type="date"
+            class="glass-input date-input"
+            title="Start Date"
+            aria-label="Start Date"
+            [value]="dateFrom()"
+            (input)="onDateFromChange($event)"
+          />
+        </div>
+
+        <div class="filter-item date-item">
+          <input
+            type="date"
+            class="glass-input date-input"
+            title="End Date"
+            aria-label="End Date"
+            [value]="dateTo()"
+            (input)="onDateToChange($event)"
+          />
+        </div>
+
+        <!-- Reset Button -->
+        <div class="filter-item reset-item">
+          <button type="button" class="btn-secondary reset-btn" (click)="resetFilters()" title="Reset Filters">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ledger Feed Section -->
+    <section class="transactions-feed-section">
+      @if (loading()) {
+        <div class="loading-state glass-panel">
+          <div class="loading-spinner"></div>
+          <p>Reconciling transactions...</p>
+        </div>
+      } @else if (transactions().length > 0) {
+        <div class="feed-list">
+          @for (tx of transactions(); track tx._id) {
+            <app-transaction-item
+              [transaction]="tx"
+              [allowActions]="true"
+              (deleteRequested)="onDeleteTransaction($event)"
+              (editRequested)="onEditTransaction($event)"
+            />
+          }
+        </div>
+
+        <!-- Pagination Bar -->
+        @if (pagination().totalPages > 1) {
+          <div class="pagination-bar glass-panel">
+            <div class="pagination-info tabular-nums">
+              Showing page <span class="highlight">{{ pagination().page }}</span> of <span class="highlight">{{ pagination().totalPages }}</span> ({{ pagination().total }} total records)
+            </div>
+
+            <div class="pagination-controls">
+              <button
+                type="button"
+                class="btn-secondary page-btn"
+                [disabled]="pagination().page <= 1"
+                (click)="goToPage(pagination().page - 1)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                <span>Previous</span>
+              </button>
+
+              <button
+                type="button"
+                class="btn-secondary page-btn"
+                [disabled]="pagination().page >= pagination().totalPages"
+                (click)="goToPage(pagination().page + 1)">
+                <span>Next</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+      } @else {
+        <app-glass-card>
+          <app-empty-state
+            title="No transactions matched"
+            description="Try adjusting your filter criteria or record a new transaction in your ledger."
+            actionLabel="Add Transaction"
+            (actionClicked)="openAddModal()"
+          />
+        </app-glass-card>
+      }
+    </section>
+  </main>
+
+  <!-- Modal for Creating/Editing Transaction -->
+  <app-transaction-modal
+    [isOpen]="isModalOpen()"
+    [transactionToEdit]="selectedTransactionForEdit()"
+    (closed)="closeModal()"
+    (saved)="onTransactionSaved()"
+  />
+</div>
